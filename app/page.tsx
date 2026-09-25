@@ -1,12 +1,57 @@
 // 
 
+import Image from "next/image";
 import Navbar from "./components/navbar";
 
 export default function Home(){
   return(
-    <main>
+<main>
       <Navbar/>
-    </main>
+
+
+      <section className="px-6 py-16">
+        <div className="grid item-center gap-10 md:grid-cols-2">
+  {/* herosec */}
+
+
+          <div>
+            <p className="mb-4 text-sm font-bold text-[#ccff00]">Workout library
+            </p>
+            <h1 className="text-5xl font-black leading-tight">
+                TRAIN WITH INTENT. LOG EVERY SET.
+            </h1>
+            <p className="mt-6 text-white/60">
+              FitLog is a dark, no-nonsense gym companion: pick a lift,
+              lock it into todays plan, and watch the weeks work add up.</p>
+            <a href="#library"
+            className="mt-8 inline-block bg-[#ccff00] px-6 py-3 font-bold text-black">
+              BROWS WORKOUTS
+            </a>
+          </div>
+          
+          <div>
+              <Image
+        src="/banner.png"
+        alt="Workout"
+        width={800}
+        height={600}
+        className="h-full w-full object-cover"/>
+          </div>
+        </div>
+      </section>
+
+      <section id="library" className="px-6 py-16">
+
+          <h2 className="text-4xl font-black">
+            THE LIBRARY
+        </h2>
+        <p className="mt-3 text-white/60">
+          Twelve lifts covering every major muscle group.
+        </p>
+
+
+      </section>
+  </main>
   );
 }
 
