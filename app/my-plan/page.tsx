@@ -44,27 +44,40 @@ export default function MyPlan() {
   const [plan, setPlan] = useState<Workout[]>(getPlan);
   const [saved, setSaved] = useState<Workout[]>(getSaved);
   const [activeTab, setActiveTab] = useState("plan");
-
-  const workouts = activeTab === "plan" ? plan : saved;
+const [message, setMessage] = useState("");
 
 
   function markAsDone(id: number) {
   const updatedPlan = plan.map((workout) =>
     workout.id === id
       ? { ...workout, done: true }
-      : workout
-  );
-
+      : workout);
   setPlan(updatedPlan);
   localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
+  setMessage("Workout marked as done.");
+    //   setMessage("Workout marked as done.");
+
 }
+
+
 
 function removeWorkout(id: number) {
   const updatedPlan = plan.filter((workout) => workout.id !== id);
-
   setPlan(updatedPlan);
   localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
+ setMessage("Workout removed.");
+
+   const workouts = activeTab === "plan" ? plan : saved;
+  setMessage("Workout removed.");
 }
+
+  
+
+
+  const workouts = activeTab === "plan" ? plan : saved;
+
+
+
 
 
   const totalMinutes = plan.reduce(
@@ -79,6 +92,12 @@ function removeWorkout(id: number) {
 
   return (
     <main className="px-6 py-12">
+
+{message && (
+  <div className="fixed right-6 top-6 z-50 border border-[#ccff00] bg-black px-5 py-3 text-sm font-bold text-[#ccff00]">
+    {message}
+  </div>
+)}
 
       {/* Page heading */}
       <h1 className="text-5xl font-black">
@@ -195,6 +214,9 @@ function removeWorkout(id: number) {
 
               </div>
 
+
+
+
               {/* Actions */}
               <div className="flex gap-3">
 
@@ -205,21 +227,24 @@ function removeWorkout(id: number) {
                   VIEW DETAILS
                 </Link>
 
-                {activeTab === "plan" && (
-                 
-                 
-<button
-  onClick={() => markAsDone(workout.id)}
-  className="border border-[#ccff00] px-4 py-2 text-sm font-bold"
->
-  ✓ MARK AS DONE
-</button>
- )}
+               
+               
+{activeTab === "plan" && (
+  <button
+    onClick={() => markAsDone(workout.id)}
+    className="border border-[#ccff00] px-4 py-2 text-sm font-bold"
+  >
+    ✓ MARK AS DONE
+  </button>
+)}
+
+
 
                 <button
   onClick={() => removeWorkout(workout.id)}
-  className="px-3 py-2 text-xl">
- ×
+  className="px-3 py-2 text-xl"
+>
+  ×
 </button>
               </div>
 
