@@ -26,7 +26,9 @@ export default function WorkoutDetail() {
 
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
 
+  // Get single workout from API
   useEffect(() => {
     async function fetchWorkout() {
       try {
@@ -47,17 +49,76 @@ export default function WorkoutDetail() {
     fetchWorkout();
   }, [id]);
 
-  if (loading) {
-    return <p className="p-6 text-[#ccff00]">Loading workout…</p>;
+  // Add workout to today's plan
+  function addToPlan() {
+    if (!workout) return;
+
+    const savedPlan = localStorage.getItem("fitlog-plan");
+
+    const plan = savedPlan ? JSON.parse(savedPlan) : [];
+
+    const alreadyAdded = plan.some(
+      (item: Workout) => item.id === workout.id
+    );
+
+    if (alreadyAdded) {
+      setMessage("Already added to today's plan.");
+      return;
+    }
+
+    const updatedPlan = [...plan, workout];
+
+    localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
+
+    setMessage("Added to today's plan.");
   }
 
+  // Save workout for later
+  function saveWorkout() {
+    if (!workout) return;
+
+    const savedWorkouts = localStorage.getItem("fitlog-saved");
+
+    const saved = savedWorkouts ? JSON.parse(savedWorkouts) : [];
+
+    const alreadySaved = saved.some(
+      (item: Workout) => item.id === workout.id
+    );
+
+    if (alreadySaved) {
+      setMessage("Already saved for later.");
+      return;
+    }
+
+    const updatedSaved = [...saved, workout];
+
+    localStorage.setItem("fitlog-saved", JSON.stringify(updatedSaved));
+
+    setMessage("Saved for later.");
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <p className="p-6 text-[#ccff00]">
+        Loading workout…
+      </p>
+    );
+  }
+
+  // Workout not found
   if (!workout) {
-    return <p className="p-6">Workout not found.</p>;
+    return (
+      <p className="p-6">
+        Workout not found.
+      </p>
+    );
   }
 
   return (
     <main className="px-6 py-10">
       <div className="grid gap-10 md:grid-cols-2">
+
         {/* Left side: workout image */}
         <div>
           <Image
@@ -71,6 +132,8 @@ export default function WorkoutDetail() {
 
         {/* Right side: workout information */}
         <div>
+
+          {/* Muscle group tags */}
           <div className="flex flex-wrap gap-2">
             {workout.muscleGroups.map((muscle) => (
               <span
@@ -82,73 +145,125 @@ export default function WorkoutDetail() {
             ))}
           </div>
 
+          {/* Workout name */}
           <h1 className="mt-4 text-4xl font-black">
             {workout.name}
           </h1>
 
+          {/* Description */}
           <p className="mt-4 text-white/60">
             {workout.description}
           </p>
 
           {/* Workout specifications */}
           <div className="mt-8 grid grid-cols-2 gap-4">
+
             <div>
-              <p className="text-sm text-white/50">Equipment</p>
-              <p className="font-bold">{workout.equipment}</p>
+              <p className="text-sm text-white/50">
+                Equipment
+              </p>
+              <p className="font-bold">
+                {workout.equipment}
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Difficulty</p>
-              <p className="font-bold">{workout.difficulty}</p>
+              <p className="text-sm text-white/50">
+                Difficulty
+              </p>
+              <p className="font-bold">
+                {workout.difficulty}
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Sets</p>
-              <p className="font-bold">{workout.sets}</p>
+              <p className="text-sm text-white/50">
+                Sets
+              </p>
+              <p className="font-bold">
+                {workout.sets}
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Reps</p>
-              <p className="font-bold">{workout.reps}</p>
+              <p className="text-sm text-white/50">
+                Reps
+              </p>
+              <p className="font-bold">
+                {workout.reps}
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Duration</p>
-              <p className="font-bold">{workout.duration} min</p>
+              <p className="text-sm text-white/50">
+                Duration
+              </p>
+              <p className="font-bold">
+                {workout.duration} min
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Calories</p>
-              <p className="font-bold">{workout.caloriesBurned} kcal</p>
+              <p className="text-sm text-white/50">
+                Calories
+              </p>
+              <p className="font-bold">
+                {workout.caloriesBurned} kcal
+              </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">Rating</p>
-              <p className="font-bold">★ {workout.rating}</p>
+              <p className="text-sm text-white/50">
+                Rating
+              </p>
+              <p className="font-bold">
+                ★ {workout.rating}
+              </p>
             </div>
+
           </div>
 
           {/* Instructions */}
           <div className="mt-8">
-            <h2 className="text-2xl font-black">HOW TO DO IT</h2>
+            <h2 className="text-2xl font-black">
+              HOW TO DO IT
+            </h2>
 
             <ol className="mt-4 list-decimal space-y-3 pl-5 text-white/70">
               {workout.instructions.map((instruction, index) => (
-                <li key={index}>{instruction}</li>
+                <li key={index}>
+                  {instruction}
+                </li>
               ))}
             </ol>
           </div>
 
           {/* Buttons */}
-          <div className="mt-8 flex gap-4">
-            <button className="bg-[#ccff00] px-5 py-3 font-bold text-black">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+
+            <button
+              onClick={addToPlan}
+              className="bg-[#ccff00] px-5 py-3 font-bold text-black"
+            >
               ADD TO TODAYS PLAN
             </button>
 
-            <button className="border border-[#ccff00] px-5 py-3 font-bold">
+            <button
+              onClick={saveWorkout}
+              className="border border-[#ccff00] px-5 py-3 font-bold"
+            >
               SAVE FOR LATER
             </button>
+
           </div>
+
+          {/* Success / information message */}
+          {message && (
+            <p className="mt-4 text-sm text-[#ccff00]">
+              {message}
+            </p>
+          )}
+
         </div>
       </div>
     </main>
