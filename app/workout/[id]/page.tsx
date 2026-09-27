@@ -54,8 +54,6 @@ export default function WorkoutDetail() {
     if (!workout) return;
 
     const savedPlan = localStorage.getItem("fitlog-plan");
-    window.dispatchEvent(new Event("fitlog-updated"));
-
     const plan = savedPlan ? JSON.parse(savedPlan) : [];
 
     const alreadyAdded = plan.some(
@@ -71,6 +69,9 @@ export default function WorkoutDetail() {
 
     localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
 
+    // Update Navbar counter
+    window.dispatchEvent(new Event("fitlog-updated"));
+
     setMessage("Added to today's plan.");
   }
 
@@ -79,7 +80,6 @@ export default function WorkoutDetail() {
     if (!workout) return;
 
     const savedWorkouts = localStorage.getItem("fitlog-saved");
-
     const saved = savedWorkouts ? JSON.parse(savedWorkouts) : [];
 
     const alreadySaved = saved.some(
@@ -94,8 +94,9 @@ export default function WorkoutDetail() {
     const updatedSaved = [...saved, workout];
 
     localStorage.setItem("fitlog-saved", JSON.stringify(updatedSaved));
-window.dispatchEvent(new Event("fitlog-updated"));
 
+    // Update Navbar counter
+    window.dispatchEvent(new Event("fitlog-updated"));
 
     setMessage("Saved for later.");
   }
@@ -162,66 +163,40 @@ window.dispatchEvent(new Event("fitlog-updated"));
           <div className="mt-8 grid grid-cols-2 gap-4">
 
             <div>
-              <p className="text-sm text-white/50">
-                Equipment
-              </p>
-              <p className="font-bold">
-                {workout.equipment}
-              </p>
+              <p className="text-sm text-white/50">Equipment</p>
+              <p className="font-bold">{workout.equipment}</p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Difficulty
-              </p>
-              <p className="font-bold">
-                {workout.difficulty}
-              </p>
+              <p className="text-sm text-white/50">Difficulty</p>
+              <p className="font-bold">{workout.difficulty}</p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Sets
-              </p>
-              <p className="font-bold">
-                {workout.sets}
-              </p>
+              <p className="text-sm text-white/50">Sets</p>
+              <p className="font-bold">{workout.sets}</p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Reps
-              </p>
-              <p className="font-bold">
-                {workout.reps}
-              </p>
+              <p className="text-sm text-white/50">Reps</p>
+              <p className="font-bold">{workout.reps}</p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Duration
-              </p>
-              <p className="font-bold">
-                {workout.duration} min
-              </p>
+              <p className="text-sm text-white/50">Duration</p>
+              <p className="font-bold">{workout.duration} min</p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Calories
-              </p>
+              <p className="text-sm text-white/50">Calories</p>
               <p className="font-bold">
                 {workout.caloriesBurned} kcal
               </p>
             </div>
 
             <div>
-              <p className="text-sm text-white/50">
-                Rating
-              </p>
-              <p className="font-bold">
-                ★ {workout.rating}
-              </p>
+              <p className="text-sm text-white/50">Rating</p>
+              <p className="font-bold">★ {workout.rating}</p>
             </div>
 
           </div>
@@ -248,7 +223,7 @@ window.dispatchEvent(new Event("fitlog-updated"));
               onClick={addToPlan}
               className="bg-[#ccff00] px-5 py-3 font-bold text-black"
             >
-              ADD TO TODAYS PLAN
+              ADD TO TODAY&apos;S PLAN
             </button>
 
             <button
