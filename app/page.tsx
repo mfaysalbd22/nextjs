@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 // import Image from "next/image";
 import Link from "next/link";
-import Navbar from "./components/navbar";
 
 type Workout = {
   id: number;
@@ -68,7 +67,6 @@ export default function Home() {
 
   return (
     <main>
-      <Navbar />
 
       {/* Hero */}
       <section className="px-6 py-16">

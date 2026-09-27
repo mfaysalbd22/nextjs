@@ -54,6 +54,7 @@ export default function WorkoutDetail() {
     if (!workout) return;
 
     const savedPlan = localStorage.getItem("fitlog-plan");
+    window.dispatchEvent(new Event("fitlog-updated"));
 
     const plan = savedPlan ? JSON.parse(savedPlan) : [];
 
@@ -93,6 +94,8 @@ export default function WorkoutDetail() {
     const updatedSaved = [...saved, workout];
 
     localStorage.setItem("fitlog-saved", JSON.stringify(updatedSaved));
+window.dispatchEvent(new Event("fitlog-updated"));
+
 
     setMessage("Saved for later.");
   }

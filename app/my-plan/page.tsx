@@ -55,21 +55,32 @@ const [message, setMessage] = useState("");
   setPlan(updatedPlan);
   localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
   setMessage("Workout marked as done.");
-    //   setMessage("Workout marked as done.");
+  setMessage("Workout marked as done.");
+window.dispatchEvent(new Event("fitlog-updated"));
 
 }
+
 
 
 
 function removeWorkout(id: number) {
-  const updatedPlan = plan.filter((workout) => workout.id !== id);
-  setPlan(updatedPlan);
-  localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
- setMessage("Workout removed.");
+  if (activeTab === "plan") {
+    const updatedPlan = plan.filter((workout) => workout.id !== id);
 
-   const workouts = activeTab === "plan" ? plan : saved;
+    setPlan(updatedPlan);
+    localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
+  } else {
+    const updatedSaved = saved.filter((workout) => workout.id !== id);
+
+    setSaved(updatedSaved);
+    localStorage.setItem("fitlog-saved", JSON.stringify(updatedSaved));
+  }
+
   setMessage("Workout removed.");
+  window.dispatchEvent(new Event("fitlog-updated"));
 }
+
+
 
   
 
